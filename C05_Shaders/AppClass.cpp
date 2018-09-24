@@ -67,7 +67,7 @@ void AppClass::InitOpenGL(void)
 }
 void AppClass::InitShaders(void)
 {
-	m_uShaderProgramID = LoadShaders("Shaders//BasicColor.vs", "Shaders//BasicColor.fs");
+	m_uShaderProgramID = LoadShaders("Shaders//ComplementaryColor.vs", "Shaders//ComplementaryColor.fs");
 	glUseProgram(m_uShaderProgramID);
 }
 void AppClass::InitVariables(void)
@@ -75,13 +75,13 @@ void AppClass::InitVariables(void)
 	std::vector<glm::vec3> lVertex;
 	//vertex 1
 	lVertex.push_back(glm::vec3(-1.0f, -1.0f, 0.0f)); //position
-	lVertex.push_back(m_v3Col1); //color
+	lVertex.push_back(glm::vec3(1.0f, 0.0f, 0.0f)); //color
 								 //vertex 2
 	lVertex.push_back(glm::vec3(1.0f, -1.0f, 0.0f)); //position
-	lVertex.push_back(m_v3Col2); //color
+	lVertex.push_back(glm::vec3(0.0f, 1.0f, 0.0f)); //color
 								 //vertex 3
 	lVertex.push_back(glm::vec3(0.0f, 1.0f, 0.0f)); //position
-	lVertex.push_back(m_v3Col3); //color
+	lVertex.push_back(glm::vec3(0.0f, 0.0f, 1.0f)); //color
 
 	glGenVertexArrays(1, &m_uVAO);//Generate vertex array object
 	glGenBuffers(1, &m_uVBO);//Generate Vertex Buffered Object
@@ -114,12 +114,9 @@ void AppClass::ProcessKeyboard(sf::Event a_event)
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 		m_v3Color = glm::vec3(0.0f, 0.0f, 1.0f);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)) // Toggles complementary color and norm colors
-	{
-		SetComplementaryColor(m_v3Col1);
-		SetComplementaryColor(m_v3Col2);
-		SetComplementaryColor(m_v3Col3);
-		InitVariables();
 		m_v3Color = glm::vec3(-1.0f, -1.0f, -1.0f);
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		m_boolComplementaryColor = !m_boolComplementaryColor;
 	}
 }
 void AppClass::Display(void)
@@ -128,8 +125,15 @@ void AppClass::Display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//read uniforms and send values
-	GLuint SolidColor = glGetUniformLocation(m_uShaderProgramID, "SolidColor");
+	GLuint SolidColor = glGetUniformLocation(m_uShaderProgramID, "BasicColor");
 	glUniform3f(SolidColor, m_v3Color.r, m_v3Color.g, m_v3Color.b);
+	GLuint SwapColor = glGetUniformLocation(m_uShaderProgramID, "SetComplementary");
+	glUniform1i(SwapColor, m_boolComplementaryColor);
+	//GLuint Cobey = glGetUniformLocation(m_uShaderProgramID, "ColorSwap");
+	//glUniform3f(Cobey, true);
+	//GLuint M4toWorld = glGetUniformLocation();
+	//const float matix[16] = { 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 };
+	//glUniformMatrix4fv(M4toWorld, 1 GL_FALSE, maxtrix);
 
 	//draw content
 	glDrawArrays(GL_TRIANGLES, 0, 3);

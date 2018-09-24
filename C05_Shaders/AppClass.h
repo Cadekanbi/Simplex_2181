@@ -29,11 +29,14 @@ class AppClass
 	GLuint m_uVAO = 0; //Vertex Array Object
 	GLuint m_uVBO = 0; //Vertex Buffer Object
 
-	glm::vec3 m_v3Color = glm::vec3(-1.0f); //Color of shape
+	typedef glm::vec3 vector3;
+	typedef glm::mat4x4 matrix4;
 
-	glm::vec3 m_v3Col1 = glm::vec3(1.0f, 0.0f, 0.0f); //For triangles with gradients
-	glm::vec3 m_v3Col2 = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::vec3 m_v3Col3 = glm::vec3(0.0f, 0.0f, 1.0f);
+	matrix4 m_m4toWorld;
+	vector3 m_v3Position;
+
+	glm::vec3 m_v3Color = glm::vec3(-1.0f); //Color of shape
+	bool m_boolComplementaryColor = false; //Color of shape
 
 	bool m_bRunning = true; //Running Flag
 
