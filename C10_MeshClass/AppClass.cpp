@@ -1,13 +1,18 @@
 #include "AppClass.h"
 void Application::InitVariables(void)
 {
-	//Make MyMesh object
-	m_pMesh = new MyMesh();
-	m_pMesh->GenerateCube(2.0f, C_BROWN);
-
+	m_pWindow->setPosition(sf::Vector2i(710, 0));
 	//Make MyMesh object
 	m_pMesh1 = new MyMesh();
-	m_pMesh1->GenerateCube(1.0f, C_WHITE);
+	m_pMesh1->AddCircle(3.0f, 3, vector3(0.0f, 0.5f, 0.0f));
+	m_pMesh1->AddVertexColor(vector3(0.0f, 1.0f, 0.0f));
+
+	//Make MyMesh object
+	m_pMesh = new MyMesh();
+	m_pMesh->AddQuad(vector3(0.0f, 0.0f, 0.0f), vector3(-1.0f, 0.0f, 0.0f), vector3(0.0f, -1.0f, 0.0f), vector3(-1.0f, -1.0f, 0.0f));
+	m_pMesh->AddVertexColor(vector3(1.0f, 1.0f, 0.0f));
+	m_pMesh->AddVertexColor(vector3(1.0f, 1.0f, 0.0f));
+	m_pMesh->AddVertexColor(vector3(0.0f, 1.0f, 0.0f));
 }
 void Application::Update(void)
 {
@@ -18,18 +23,18 @@ void Application::Update(void)
 	ArcBall();
 
 	//Is the first person camera active?
-	CameraRotation();
+	//CameraRotation();
 }
 void Application::Display(void)
 {
 	// Clear the screen
 	ClearScreen();
 
-	m_pMesh->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), ToMatrix4(m_qArcBall));
-	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), glm::translate(vector3( 3.0f, 0.0f, 0.0f)));
+	//m_pMesh->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), ToMatrix4(m_qArcBall));
+	m_pMesh1->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), ToMatrix4(m_qArcBall));
 		
 	// draw a skybox
-	m_pMeshMngr->AddSkyboxToRenderList();
+	m_pMeshMngr->AddSkyboxToRenderList("Skybox_02.png");
 	
 	//render list call
 	m_uRenderCallCount = m_pMeshMngr->Render();

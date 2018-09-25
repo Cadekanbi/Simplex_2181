@@ -153,11 +153,13 @@ void MyMesh::AddTri(vector3 a_vBottomLeft, vector3 a_vBottomRight, vector3 a_vTo
 {
 	//C
 	//| \
-		//A--B
-//This will make the triangle A->B->C 
+	//A--B
+	//This will make the triangle A->B->C 
 	AddVertexPosition(a_vBottomLeft);
 	AddVertexPosition(a_vBottomRight);
 	AddVertexPosition(a_vTopLeft);
+		
+	//CompileOpenGL3X();
 }
 void MyMesh::AddQuad(vector3 a_vBottomLeft, vector3 a_vBottomRight, vector3 a_vTopLeft, vector3 a_vTopRight)
 {
@@ -172,6 +174,61 @@ void MyMesh::AddQuad(vector3 a_vBottomLeft, vector3 a_vBottomRight, vector3 a_vT
 	AddVertexPosition(a_vTopLeft);
 	AddVertexPosition(a_vBottomRight);
 	AddVertexPosition(a_vTopRight);
+
+	//CompileOpenGL3X();
+}
+void MyMesh::AddCircle(float a_fRadius, int a_nSubdivisions, vector3 a_v3Color)
+{
+	if (a_fRadius < 0.01f)
+		a_fRadius = 0.01f;
+
+	//Sets minimum and maximum of subdivisions
+	if (a_nSubdivisions < 1)
+	{
+	}
+
+	float subDivAngle = PI / a_nSubdivisions; // Radians unfortunately
+	float tempVal = 0;
+	vector3 center(0.0f, 0.0f, 0.0f);
+	vector3 start(-a_fRadius, 0.0f, 0.0f);
+
+	vector3 prev = start;
+	vector3 cur(0.0f, 0.0f, 0.0f);
+
+	for (int i = 0; i < 3; i++) {
+		if (i = 0) {
+			tempVal += subDivAngle;
+			AddTri(prev, center, vector3(a_fRadius * cosf(tempVal), a_fRadius * sinf(tempVal), 0));
+			prev = vector3(a_fRadius * cosf(tempVal), a_fRadius * sinf(tempVal), 0);
+		}
+		else if (i = 2) {
+			tempVal += subDivAngle;
+			AddTri(start, center, vector3(-a_fRadius * cosf(tempVal), -a_fRadius * sinf(tempVal), 0));
+		}
+		else {
+			tempVal += subDivAngle;
+			AddTri(prev, center, vector3(-a_fRadius * cosf(tempVal), -a_fRadius * sinf(tempVal), 0));
+			prev = vector3(a_fRadius * cosf(tempVal), a_fRadius * sinf(tempVal), 0);
+		}
+	}
+	/*
+	for (int i = 0; i < a_nSubdivisions - 1; i++) {
+
+		if (i = a_nSubdivisions - 1) {
+			AddTri(prev, center, start);
+			break;
+		}
+
+		tempVal += subDivAngle;
+		
+		AddTri(prev, center, vector3(a_fRadius * cosf(tempVal), a_fRadius * sinf(tempVal), 0));
+		
+		prev = vector3(a_fRadius * cosf(tempVal), a_fRadius * sinf(tempVal), 0);;
+	}*/
+
+	// Adding information about color
+	CompleteMesh(a_v3Color);
+	CompileOpenGL3X();
 }
 void MyMesh::GenerateCube(float a_fSize, vector3 a_v3Color)
 {
@@ -403,11 +460,11 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	Init();
 
 	// Replace this with your code
-	Mesh* pMesh = new Mesh();
-	pMesh->GenerateSphere(a_fRadius, a_nSubdivisions, a_v3Color);
-	m_lVertexPos = pMesh->GetVertexList();
-	m_uVertexCount = m_lVertexPos.size();
-	SafeDelete(pMesh);
+	//Mesh* pMesh = new Mesh();
+	//pMesh->GenerateSphere(a_fRadius, a_nSubdivisions, a_v3Color);
+	//m_lVertexPos = pMesh->GetVertexList();
+	//m_uVertexCount = m_lVertexPos.size();
+	//SafeDelete(pMesh);
 	// -------------------------------
 
 	// Adding information about color

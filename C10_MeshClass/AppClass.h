@@ -26,7 +26,7 @@ private:
 
 	vector3 m_v3Mouse = vector3(); //position of the mouse in the window
 	bool m_bFPC = false;// First Person Camera flag
-	bool m_bArcBall = false;// Arcball flag
+	bool m_bArcBall = true;// Arcball flag
 	quaternion m_qArcBall; //ArcBall quaternion
 
 	vector4 m_v4ClearColor; //Color of the scene
