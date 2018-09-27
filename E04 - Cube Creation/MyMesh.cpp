@@ -7,16 +7,40 @@ void MyMesh::GenerateCircle(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	if (a_fRadius < 0.01f)
 		a_fRadius = 0.01f;
 
-	if (a_nSu
-		bdivisions < 3)
-		a_nSubdivisions = 3;
-	if (a_nSubdivisions > 360)
-		a_nSubdivisions = 360;
+	//Sets minimum and maximum of subdivisions
+	if (a_nSubdivisions < 3)
+	{
+		return;
+	}
+	if (a_nSubdivisions > 12)
+	{
+		return;
+	}
 
-	/*
-		Calculate a_nSubdivisions number of points around a center point in a radial manner
-		then call the AddTri function to generate a_nSubdivision number of faces
-	*/
+	float subDivAngle = PI / a_nSubdivisions; // Radians unfortunately
+	float tempVal = 0;
+	vector3 center(0.0f, 0.0f, 0.0f);
+	vector3 start(-a_fRadius, 0.0f, 0.0f);
+
+	vector3 prev = start;
+	vector3 cur(0.0f, 0.0f, 0.0f);
+
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		if (i = 0) {
+			tempVal += subDivAngle;
+			AddTri(prev, center, vector3(a_fRadius * cosf(tempVal), a_fRadius * sinf(tempVal), 0));
+			prev = vector3(a_fRadius * cosf(tempVal), a_fRadius * sinf(tempVal), 0);
+		}
+		else if (i = a_nSubdivisions - 1) {
+			tempVal += subDivAngle;
+			AddTri(start, center, vector3(-a_fRadius * cosf(tempVal), -a_fRadius * sinf(tempVal), 0));
+		}
+		else {
+			tempVal += subDivAngle;
+			AddTri(prev, center, vector3(-a_fRadius * cosf(tempVal), -a_fRadius * sinf(tempVal), 0));
+			prev = vector3(a_fRadius * cosf(tempVal), a_fRadius * sinf(tempVal), 0);
+		}
+	}
 
 	// Adding information about color
 	CompleteMesh(a_v3Color);
