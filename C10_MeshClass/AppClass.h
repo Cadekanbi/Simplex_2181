@@ -14,6 +14,7 @@ Date: 2017/05
 
 class Application
 {
+	MyMesh* m_MeshEnemy = nullptr;
 	MyMesh* m_pMeshCircle = nullptr;
 	MyMesh* m_pMeshCone = nullptr;
 	MyMesh* m_pMeshCylinder = nullptr;

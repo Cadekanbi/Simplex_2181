@@ -1,27 +1,12 @@
 #include "AppClass.h"
 void Application::InitVariables(void)
 {
-	m_pWindow->setPosition(sf::Vector2i(710, 0));
+	//m_pWindow->setPosition(sf::Vector2i(710, 0));
 
 	//Make MyMesh object
-	m_pMeshCircle = new MyMesh();
-	m_pMeshCircle->AddCircle(2.0f, 7, vector3(0.0f, 0.5f, 0.0f));
-
-	m_pMeshCone = new MyMesh();
-	m_pMeshCone->GenerateCone(2.0f, 5.0f, 7, vector3(0.0f, 0.5f, 0.0f));
-
-	m_pMeshCylinder = new MyMesh();
-	m_pMeshCylinder->GenerateCylinder(2.0f, 5.0f, 7, vector3(0.0f, 0.5f, 0.0f));
-
-	m_pMeshTube = new MyMesh();
-	m_pMeshTube->GenerateTube(3.0f, 2.0f, 5.0f, 7, vector3(0.0f, 0.5f, 0.0f));
-	
-	//Make MyMesh object
-	/*m_pMesh = new MyMesh();
-	m_pMesh->AddQuad(vector3(0.0f, 0.0f, 0.0f), vector3(-1.0f, 0.0f, 0.0f), vector3(0.0f, -1.0f, 0.0f), vector3(-1.0f, -1.0f, 0.0f));
-	m_pMesh->AddVertexColor(vector3(1.0f, 1.0f, 0.0f));
-	m_pMesh->AddVertexColor(vector3(1.0f, 1.0f, 0.0f));
-	m_pMesh->AddVertexColor(vector3(0.0f, 1.0f, 0.0f));*/
+	m_MeshEnemy = new MyMesh();
+	m_MeshEnemy->GenerateCube(1, C_PURPLE);
+	m_MeshEnemy->GenerateCube(1, C_PURPLE);
 }
 void Application::Update(void)
 {
@@ -29,10 +14,10 @@ void Application::Update(void)
 	m_pSystem->Update();
 
 	//Is the arcball active?
-	ArcBall();
+	//ArcBall();
 
 	//Is the first person camera active?
-	//CameraRotation();
+	CameraRotation();
 }
 void Application::Display(void)
 {
@@ -41,7 +26,17 @@ void Application::Display(void)
 
 	//m_pMesh->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), ToMatrix4(m_qArcBall));
 	//m_pMeshCircle->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), ToMatrix4(m_qArcBall));
-	m_pMeshTube->Render(m_pCameraMngr->GetProjectionMatrix(), m_pCameraMngr->GetViewMatrix(), ToMatrix4(m_qArcBall));
+	//m_pCube->Render(m4Projection, m4View);
+	
+	matrix4 m4View = m_pCameraMngr->GetViewMatrix();
+	matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix();
+
+	static float value = 0.0f;
+	matrix4 m4Translate = glm::translate(IDENTITY_M4, vector3(value, 2.0f, 3.0f));
+	value += 0.01f;
+	matrix4 m4Model = m4Translate;
+
+	m_MeshEnemy->Render(m4Projection, m4View, m4Model);
 
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList("Skybox_02.png");

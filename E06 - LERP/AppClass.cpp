@@ -53,19 +53,54 @@ void Application::Display(void)
 
 	//calculate the current position
 	vector3 v3CurrentPos;
-	
-
-
-
 
 	//your code goes here
 	v3CurrentPos = vector3(0.0f, 0.0f, 0.0f);
-	//-------------------
+
+	// Time tracking
+	// Current time from processor (Time dependent not frame dependent)
+	/*
+	static DWORD dStartTime = GetTickCount();
+	DWORD dCurrentTime = GetTickCount();
+	DWORD dTime = dCurrentTime - dStartTime;
+	float fTime = dTime / 1000.0f;
+	float fAnimLength = 4.0f;
+
+	static int curTarget = 1;
+	float percentage = fTime;
+
+	percentage = fTime / fAnimLength;
+
+	v3CurrentPos = glm::lerp(m_stopsList[curTarget - 1], m_stopsList[curTarget], percentage);
+
+	if (v3CurrentPos == m_stopsList[curTarget] && curTarget != m_stopsList.size())
+		curTarget += 1;
+	//-------------------*/
+
+	float fPercentage = MapValue(fTimer, 0.0f, 2.0f, 0.0f, 1.0f);
+	static uint curTarget = 0;
+	vector3 start(m_stopsList[curTarget]);
+	vector3 end(m_stopsList[curTarget]);
+
+	if (curTarget < m_stopsList.size() - 1) {
+		start = m_stopsList[curTarget];
+		end = m_stopsList[curTarget + 1];
+	}
+	else {
+		start = m_stopsList[m_stopsList.size() - 1];
+		end = m_stopsList[0];
+	}
+
+	if (fPercentage >= 1.0f) {
+		curTarget += 1;
+		fTimer = m_pSystem->GetDeltaTime(uClock);
+		curTarget %= m_stopsList.size();
+	}
+
+	v3CurrentPos = glm::lerp(start, end, fPercentage);
 	
 
-
-	
-	matrix4 m4Model = glm::translate(v3CurrentPos);
+	matrix4 m4Model = glm::translate(IDENTITY_M4, v3CurrentPos);
 	m_pModel->SetModelMatrix(m4Model);
 
 	m_pMeshMngr->Print("\nTimer: ");//Add a line on top
